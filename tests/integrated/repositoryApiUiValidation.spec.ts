@@ -10,7 +10,7 @@ async ({ request, page }) => {
 
     const apiResponse =
         await githubService.getRepository(
-            'YOUR_USERNAME',
+            'malaysahacreative-alt',
             'aiqe-github-capstone'
         );
 
