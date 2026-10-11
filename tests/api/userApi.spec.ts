@@ -2,25 +2,38 @@ import { test, expect } from '@playwright/test';
 import { GitHubService } from '../../src/services/GitHubService';
 import { env } from '../../config/env';
 
-test('Validate authenticated GitHub user', async ({ request }) => {
+test.describe('GitHub User API', () => {
 
-    console.log('User:', env.userId);
-    console.log('Token Exists:', !!env.token);
-    console.log('API URL:', env.apiBaseUrl);
-    const githubService =
-        new GitHubService(request);
+    test('Validate authenticated user details', async ({ request }) => {
 
-    const response =
-        await githubService.getAuthenticatedUser();
-    console.log('Status:', response.status());
-    console.log('Response:', await response.text());
+        const githubService = new GitHubService(request);
 
-    expect(response.status()).toBe(200);
+        const response =
+            await githubService.getAuthenticatedUser();
 
-    const responseBody =
-        await response.json();
+        console.log('Status Code:', response.status());
 
-    expect(responseBody.login).toBeTruthy();
+        const responseBody =
+            await response.json();
 
-    expect(responseBody.id).toBeTruthy();
+        expect(response.status()).toBe(200);
+
+        expect(responseBody.login).toBe(env.userId);
+
+        expect(responseBody.id).toBeTruthy();
+
+        expect(responseBody.node_id).toBeTruthy();
+
+        expect(responseBody.html_url).toContain(
+            env.userId
+        );
+
+        expect(
+            response.headers()['content-type']
+        ).toContain('application/json');
+
+        console.log('User Login:', responseBody.login);
+        console.log('User Id:', responseBody.id);
+    });
+
 });
