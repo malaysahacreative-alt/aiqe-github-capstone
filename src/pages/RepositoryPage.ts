@@ -5,14 +5,19 @@ export class RepositoryPage extends BasePage {
 
     private readonly repositoryName: Locator;
     private readonly codeTab: Locator;
+    private readonly repositoryOwner: Locator;
  //   private readonly readmeSection: Locator;
 
     constructor(page: Page) {
-        super(page);
+    super(page);
 
-        this.repositoryName = page.locator('strong a');
-        this.codeTab = page.getByRole('link', { name: 'Code' });
-     //   this.readmeSection =page.getByRole('heading', { name: /readme/i });
+    this.repositoryName = page.locator('strong a');
+
+    this.repositoryOwner = page.locator('span.author a');
+
+    this.codeTab = page.getByRole('link', {
+        name: 'Code'
+    });
     }
 
     async validateRepositoryName(expectedRepository: string): Promise<void> {
@@ -30,4 +35,13 @@ export class RepositoryPage extends BasePage {
     async validateUrlContains(repositoryName: string): Promise<void> {
         await expect(this.page).toHaveURL(new RegExp(repositoryName));
     }
+
+    async validateRepositoryOwner(
+    expectedOwner: string
+): Promise<void> {
+
+    await expect(
+        this.repositoryOwner
+    ).toContainText(expectedOwner);
+}
 }
