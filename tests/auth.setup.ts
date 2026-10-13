@@ -1,16 +1,16 @@
 import { test } from '@playwright/test';
 
-test('Generate authentication state', async ({ page }) => {
+test('Generate Authentication State', async ({ page }) => {
 
-  await page.goto('https://github.com/login');
+    await page.goto('https://github.com/login');
 
-  console.log(
-    'Login manually, then press Ctrl+C after saving state'
-  );
+    console.log('Login manually');
 
-  await page.pause();
+    await page.pause();
 
-  await page.context().storageState({
-    path: 'playwright/.auth/user.json'
-  });
+    await page.context().storageState({
+        path: 'playwright/.auth/user.json'
+    });
+
+    console.log('Authentication state stored');
 });
