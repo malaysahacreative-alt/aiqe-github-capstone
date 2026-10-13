@@ -13,7 +13,9 @@ export class RepositoryPage extends BasePage {
 
     this.repositoryName = page.locator('strong a');
 
-    this.repositoryOwner = page.locator('span.author a');
+    this.repositoryOwner = page.locator(
+    'a[data-hovercard-type="user"]'
+    ).first();
 
     this.codeTab = page.getByRole('link', {
         name: 'Code'
