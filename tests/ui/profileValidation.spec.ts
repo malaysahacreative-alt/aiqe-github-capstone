@@ -1,12 +1,21 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
+import { ProfilePage } from '../../src/pages/ProfilePage';
 
-test('Validate Torvalds profile', async ({ page }) => {
+test(
+    'Validate public GitHub user profile information',
+    async ({ page }) => {
 
-  await page.goto('https://github.com/torvalds');
+        const profilePage =
+            new ProfilePage(page);
 
-  await expect(page).toHaveURL(/torvalds/);
+        await profilePage.openProfile(
+            'torvalds'
+        );
 
-  await expect(
-      page.getByRole('link', { name: /repositories/i })
-  ).toBeVisible();
-});
+        await profilePage.validateProfileUrl(
+            'torvalds'
+        );
+
+        await profilePage.validateRepositoriesTabVisible();
+    }
+);
