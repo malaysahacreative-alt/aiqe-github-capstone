@@ -4,46 +4,56 @@ import { BasePage } from './BasePage';
 export class RepositoryPage extends BasePage {
 
     private readonly repositoryName: Locator;
-    private readonly codeTab: Locator;
     private readonly repositoryOwner: Locator;
- //   private readonly readmeSection: Locator;
+    private readonly codeTab: Locator;
 
     constructor(page: Page) {
-    super(page);
+        super(page);
 
-    this.repositoryName = page.locator('strong a');
+        this.repositoryName = page.getByRole('link', {
+            name: /aiqe-github-capstone/i
+        });
 
-    this.repositoryOwner = page.locator(
-    'a[data-hovercard-type="user"]'
-    ).first();
+        this.repositoryOwner = page.getByRole('link', {
+            name: /malaysahacreative-alt/i
+        });
 
-    this.codeTab = page.getByRole('link', {
-        name: 'Code'
-    });
+        this.codeTab = page.getByRole('link', {
+            name: /^Code$/
+        });
     }
 
-    async validateRepositoryName(expectedRepository: string): Promise<void> {
-        await expect(this.repositoryName).toContainText(expectedRepository);
-    }
+    async validateRepositoryName(
+        expectedRepository: string
+    ): Promise<void> {
 
-    async validateCodeTabVisible(): Promise<void> {
-        await expect(this.codeTab).toBeVisible();
-    }
-/*
-    async validateReadmeVisible(): Promise<void> {
-        await expect(this.readmeSection).toBeVisible();
-    }
-*/
-    async validateUrlContains(repositoryName: string): Promise<void> {
-        await expect(this.page).toHaveURL(new RegExp(repositoryName));
+        await expect(
+            this.repositoryName
+        ).toContainText(expectedRepository);
     }
 
     async validateRepositoryOwner(
-    expectedOwner: string
-): Promise<void> {
+        expectedOwner: string
+    ): Promise<void> {
 
-    await expect(
-        this.repositoryOwner
-    ).toContainText(expectedOwner);
-}
+        await expect(
+            this.repositoryOwner
+        ).toContainText(expectedOwner);
+    }
+
+    async validateCodeTabVisible(): Promise<void> {
+
+        await expect(
+            this.codeTab
+        ).toBeVisible();
+    }
+
+    async validateUrlContains(
+        repositoryName: string
+    ): Promise<void> {
+
+        await expect(this.page).toHaveURL(
+            new RegExp(repositoryName)
+        );
+    }
 }

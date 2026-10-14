@@ -1,8 +1,18 @@
 
-# Playwright
+# Dependencies
 node_modules/
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Playwright output
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Local generated artifacts
+/screenshots/

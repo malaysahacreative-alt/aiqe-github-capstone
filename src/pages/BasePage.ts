@@ -1,19 +1,16 @@
 import { Page } from '@playwright/test';
 
 export class BasePage {
-  constructor(protected page: Page) {}
+  constructor(protected readonly page: Page) {}
 
-  
-  async navigateTo(url: string): Promise<void> {
-  await this.page.goto(url, {
-    waitUntil: 'domcontentloaded',
-    timeout: 60000,
-  });
+  async navigateTo(path: string): Promise<void> {
+    await this.page.goto(path, {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
-
   async getPageTitle(): Promise<string> {
-    return await this.page.title();
+    return this.page.title();
   }
 
   async getCurrentURL(): Promise<string> {
@@ -23,7 +20,7 @@ export class BasePage {
   async takeScreenshot(name: string): Promise<void> {
     await this.page.screenshot({
       path: `screenshots/${name}.png`,
-      fullPage: true
+      fullPage: true,
     });
   }
 }

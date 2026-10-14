@@ -1,52 +1,43 @@
-import { APIRequestContext, APIResponse } from '@playwright/test';
+import {
+  APIRequestContext,
+  APIResponse,
+} from '@playwright/test';
+
 import { env } from '../../config/env';
 
 export class GitHubService {
+  constructor(
+    private readonly request: APIRequestContext
+  ) {}
 
-    constructor(private request: APIRequestContext) {}
+  private get headers(): Record<string, string> {
+    return {
+      Authorization: `Bearer ${env.token}`,
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    };
+  }
 
-    async getAuthenticatedUser(): Promise<APIResponse> {
+  async getAuthenticatedUser() {
+    return this.request.get(`${env.apiBaseUrl}/user`, {
+      headers: this.headers,
+    });
+  }
 
-        return await this.request.get(
-            `${env.apiBaseUrl}/user`,
-            {
-                headers: {
-                    Authorization: `Bearer ${env.token}`,
-                    Accept: 'application/vnd.github+json',
-                    'X-GitHub-Api-Version': '2022-11-28'
-                }
-            }
-        );
-    }
-
-    async getRepository(
+  async getRepository(
     owner: string,
     repo: string
-) {
-
-    return await this.request.get(
-        `${env.apiBaseUrl}/repos/${owner}/${repo}`,
-        {
-            headers: {
-                Authorization: `Bearer ${env.token}`,
-                Accept: 'application/vnd.github+json',
-                'X-GitHub-Api-Version': '2022-11-28'
-            }
-        }
+  ) {
+    return this.request.get(
+      `${env.apiBaseUrl}/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`,
+      { headers: this.headers }
     );
-}
+  }
 
-async getUserRepositories(): Promise<APIResponse> {
-
-    return await this.request.get(
-        `${env.apiBaseUrl}/user/repos`,
-        {
-            headers: {
-                Authorization: `Bearer ${env.token}`,
-                Accept: 'application/vnd.github+json',
-                'X-GitHub-Api-Version': '2022-11-28'
-            }
-        }
+  async getUserRepositories() {
+    return this.request.get(
+      `${env.apiBaseUrl}/user/repos`,
+      { headers: this.headers }
     );
-}
+  }
 }

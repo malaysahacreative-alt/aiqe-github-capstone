@@ -7,7 +7,9 @@ export class GitHubHomePage extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    this.searchInput = page.getByRole('combobox');
+    this.searchInput = page.getByRole('combobox', {
+    name: /search/i,
+    });
   }
 
   async openHomePage(): Promise<void> {
