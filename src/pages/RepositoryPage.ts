@@ -10,9 +10,9 @@ export class RepositoryPage extends BasePage {
     constructor(page: Page) {
         super(page);
 
-        this.repositoryName = page.getByRole('link', {
-            name: /aiqe-github-capstone/i
-        });
+        
+    this.repositoryName = page.getByTestId('repo-name-link');
+
 
         this.repositoryOwner = page.getByRole('link', {
             name: /malaysahacreative-alt/i
