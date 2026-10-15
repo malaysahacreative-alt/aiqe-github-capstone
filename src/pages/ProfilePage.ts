@@ -14,20 +14,17 @@ export class ProfilePage extends BasePage {
     }
 
     async openProfile(userName: string): Promise<void> {
-
-        await this.page.goto(
-            `https://github.com/${userName}`
-        );
+    await this.navigateTo(
+    `/${encodeURIComponent(userName)}`
+    );
     }
 
     async validateProfileUrl(
-        userName: string
+    userName: string
     ): Promise<void> {
-
-        await expect(this.page)
-            .toHaveURL(
-                new RegExp(userName)
-            );
+    await expect(this.page).toHaveURL(
+    `https://github.com/${userName}`
+        );
     }
 
     async validateRepositoriesTabVisible(): Promise<void> {
