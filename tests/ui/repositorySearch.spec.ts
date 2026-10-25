@@ -26,6 +26,6 @@ test('Show no results for a non-existent repository search', async ({ page }) =>
 
   await expect(page).toHaveURL(/github\\.com\\/search/);
   await expect(
-    page.getByText(/we could not find any repositories matching/i)
+    page.getByText(/couldn.t find any repositories matching/i)
   ).toBeVisible();
 });
