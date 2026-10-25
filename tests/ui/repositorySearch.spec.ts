@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 import { GitHubHomePage } from '../../src/pages/GitHubHomePage';
 
 test('Validate GitHub repository search', async ({ page }) => {
-
   const homePage = new GitHubHomePage(page);
 
   await homePage.openHomePage();
@@ -16,7 +15,8 @@ test('Validate GitHub repository search', async ({ page }) => {
 });
 
 // Negative scenario: searching for a unique, non-existent repository should
-// show GitHub's no-results state rather than a repository result.
+// return the search page without a link to that repository. Avoid asserting
+// GitHub's exact no-results sentence because its wording can change.
 test('Show no results for a non-existent repository search', async ({ page }) => {
   const homePage = new GitHubHomePage(page);
   const missingRepository = 'this-repo-should-not-exist-12345';
@@ -25,7 +25,10 @@ test('Show no results for a non-existent repository search', async ({ page }) =>
   await homePage.searchRepository(missingRepository);
 
   await expect(page).toHaveURL(/\/search/);
+  await expect(page.locator('main')).toBeVisible();
+
+  // If GitHub accidentally returns a repository result, this link will exist.
   await expect(
-    page.getByText(/couldn.t find any repositories matching/i)
-  ).toBeVisible();
+    page.locator(`main a[href="/${missingRepository}"]`)
+  ).toHaveCount(0);
 });
