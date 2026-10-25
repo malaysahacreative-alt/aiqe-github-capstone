@@ -14,3 +14,18 @@ test('Validate GitHub repository search', async ({ page }) => {
 
   await expect(page).toHaveURL(/search/);
 });
+
+// Negative scenario: searching for a unique, non-existent repository should
+// show GitHub's no-results state rather than a repository result.
+test('Show no results for a non-existent repository search', async ({ page }) => {
+  const homePage = new GitHubHomePage(page);
+  const missingRepository = 'this-repo-should-not-exist-12345';
+
+  await homePage.openHomePage();
+  await homePage.searchRepository(missingRepository);
+
+  await expect(page).toHaveURL(/github\\.com\\/search/);
+  await expect(
+    page.getByText(/we could not find any repositories matching/i)
+  ).toBeVisible();
+});
