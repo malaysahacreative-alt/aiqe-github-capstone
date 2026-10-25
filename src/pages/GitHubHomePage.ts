@@ -6,14 +6,13 @@ export class GitHubHomePage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-
     this.searchInput = page.getByRole('combobox', {
-    name: /search/i,
+      name: /search/i,
     });
   }
 
   async openHomePage(): Promise<void> {
-    await this.navigateTo('https://github.com');
+    await this.navigateTo('/');
   }
 
   async searchRepository(repository: string): Promise<void> {
