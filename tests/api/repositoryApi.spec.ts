@@ -33,3 +33,19 @@ test('Validate repository details', async ({ request }) => {
     expect(responseBody.html_url)
         .toContain(apiData.repository);
 });
+
+// Negative scenario: GitHub should return 404 for a repository that does not exist.
+test('Return 404 when requesting a non-existent repository', async ({ request }) => {
+    const githubService = new GitHubService(request);
+    const missingRepository = 'this-repo-should-not-exist-12345';
+
+    const response = await githubService.getRepository(
+        apiData.owner,
+        missingRepository
+    );
+
+    expect(response.status()).toBe(404);
+
+    const responseBody = await response.json();
+    expect(responseBody.message).toBe('Not Found');
+});
